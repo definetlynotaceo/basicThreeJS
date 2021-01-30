@@ -36941,6 +36941,14 @@ if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
   /* eslint-enable no-undef */
 
 }
+},{}],"logo.png":[function(require,module,exports) {
+module.exports = "/logo.de01bb0e.png";
+},{}],"displacement.jpeg":[function(require,module,exports) {
+module.exports = "/displacement.ab25179f.jpeg";
+},{}],"shader/fragment.glsl":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\nuniform float time;\nuniform float progress;\nuniform sampler2D image;\nuniform sampler2D displacement;\nuniform vec3 resolution;\n\nvarying vec2 vUv;\nvarying vec3 vPosition;\n\nvoid main(){\n  vec4 color = texture2D(image,vUv);\n  gl_FragColor = color ;\n}\n";
+},{}],"shader/vertex.glsl":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\nuniform float time;\nvarying vec2 vUv;\n\nuniform sampler2D texture1;\nuniform sampler2D texture2;\n\nuniform vec2 pixels;\nuniform vec2 uvRate1;\n\nvoid main(){\n  vUv = uv;\n\n  // gl_position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}\n";
 },{}],"js/scripts.js":[function(require,module,exports) {
 "use strict";
 
@@ -36951,6 +36959,16 @@ exports.default = void 0;
 
 var THREE = _interopRequireWildcard(require("three"));
 
+var _logo = _interopRequireDefault(require("/logo.png"));
+
+var _displacement = _interopRequireDefault(require("/displacement.jpeg"));
+
+var _fragment = _interopRequireDefault(require("/shader/fragment.glsl"));
+
+var _vertex = _interopRequireDefault(require("/shader/vertex.glsl"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -36960,6 +36978,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+console.log(_logo.default);
 
 var sketch = /*#__PURE__*/function () {
   function sketch() {
@@ -36981,9 +37001,22 @@ var sketch = /*#__PURE__*/function () {
   _createClass(sketch, [{
     key: "addMesh",
     value: function addMesh() {
-      this.geometry = new THREE.PlaneBufferGeometry(1, 1);
-      this.material = new THREE.MeshNormalMaterial({
-        side: THREE.DoubleSide
+      this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+      this.material = new THREE.ShaderMaterial({// extensions: {
+        //   derivatives: "#extension GL_OES_standard_derivatives : enable"
+        // },
+        // side: THREE.DoubleSide,
+        // uniforms: {
+        //   time: { type : "f", value: 0 },
+        //   image: { type: "t", value: new THREE.TextureLoader().load(img) },
+        //   displacement: { type: "d", value: new THREE.TextureLoader().load(displacement) },
+        //   resolution: { type: "v4", value: new THREE.Vector4() },
+        //   uvRate1: {
+        //     value: new THREE.Vector2(1,1)
+        //   }
+        // },
+        // vertexShader: vertex,
+        // fragmentShader: fragment
       });
       this.mesh = new THREE.Mesh(this.geometry, this.material);
       this.scene.add(this.mesh);
@@ -36992,9 +37025,9 @@ var sketch = /*#__PURE__*/function () {
     key: "render",
     value: function render() {
       this.time++;
-      window.requestAnimationFrame(this.render.bind(this));
-      this.mesh.rotation.x = this.time / 200;
-      this.mesh.rotation.y = this.time / 100;
+      window.requestAnimationFrame(this.render.bind(this)); // this.mesh.rotation.x = this.time / 200;
+      // this.mesh.rotation.y = this.time / 100;
+
       this.renderer.render(this.scene, this.camera);
     }
   }]);
@@ -37004,7 +37037,7 @@ var sketch = /*#__PURE__*/function () {
 
 exports.default = sketch;
 new sketch();
-},{"three":"node_modules/three/build/three.module.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","/logo.png":"logo.png","/displacement.jpeg":"displacement.jpeg","/shader/fragment.glsl":"shader/fragment.glsl","/shader/vertex.glsl":"shader/vertex.glsl"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -37032,7 +37065,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63439" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59453" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
